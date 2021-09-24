@@ -1,5 +1,5 @@
 <template>
-    <header class="container">
+    <header>
         <h1>{{ title }}</h1>
         <Button text="Add Task" color="green" />
     </header>
@@ -18,10 +18,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 2rem;
 }
 </style>
