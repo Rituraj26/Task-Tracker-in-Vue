@@ -40,6 +40,12 @@ export default {
         toggleAddTask() {
             this.showAddTask = !this.showAddTask;
         },
+        async fetchTasks() {
+            const tasks = await fetch(`${url}/tasks`);
+            const data = await tasks.json();
+
+            return data;
+        },
         async getTask(id) {
             const res = await fetch(`${url}/tasks/${id}`);
             const data = await res.json();
@@ -56,16 +62,6 @@ export default {
             });
             const body = await res.json();
             this.tasks = [...this.tasks, body];
-        },
-        async deleteTask(id) {
-            if (confirm("Are you sure?")) {
-                const res = await fetch(`${url}/tasks/${id}`, {
-                    method: "DELETE",
-                });
-                res.status === 200
-                    ? (this.tasks = this.tasks.filter((task) => task.id !== id))
-                    : alert("Error deleting task");
-            }
         },
         async toggleReminder(id) {
             const taskToToggle = await this.getTask(id);
@@ -86,15 +82,23 @@ export default {
                 task.id === id ? { ...task, reminder: data.reminder } : task
             );
         },
-        async fetchTasks() {
-            const tasks = await fetch(`${url}/tasks`);
-            const data = await tasks.json();
-
-            return data;
+        async deleteTask(id) {
+            if (confirm("Are you sure?")) {
+                const res = await fetch(`${url}/tasks/${id}`, {
+                    method: "DELETE",
+                });
+                res.status === 200
+                    ? (this.tasks = this.tasks.filter((task) => task.id !== id))
+                    : alert("Error deleting task");
+            }
+        },
+        async sortTasks() {
+            this.tasks.sort((a, b) => a.order - b.order);
         },
     },
     async created() {
         this.tasks = await this.fetchTasks();
+        this.sortTasks();
     },
 };
 </script>
