@@ -1,5 +1,10 @@
 <template>
-    <draggable v-if="tasks" :list="tasks">
+    <draggable
+        v-model="tasks"
+        group="tasks"
+        @start="drag = true"
+        @end="drag = false"
+    >
         <div :key="task.id" v-for="task in tasks">
             <Task
                 @dblclick="$emit('toggle-reminder', task.id)"
